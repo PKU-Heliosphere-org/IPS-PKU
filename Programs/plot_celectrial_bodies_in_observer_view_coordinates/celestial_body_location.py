@@ -15,14 +15,20 @@ dms_to_deg = lambda dms: dms.d + dms.m / 60.0 + dms.s / 3600.0
 
 def current_alt_az(body, loc, time):
     """
-    :param body: Astropy celestial body object.
-    :param loc: Astropy EarthLocation object.
-    :param time: Astropy Time object.
-    :return: a tuple (alt, az) in degrees.
+    Calculate the altitude and azimuth of a celestial body at a given time and location.
+
+    :param body: An Astropy celestial body object representing the celestial body to observe, such as the sun, moon, or other stars.
+    :param loc: An Astropy EarthLocation object representing the geographic location of the observer.
+    :param time: An Astropy Time object representing the time of observation.
+    :return: A tuple (alt, az) representing the altitude and azimuth of the celestial body in degrees.
+
+    The function first transforms the celestial body's coordinates from the equatorial coordinate system to the horizontal coordinate system 
+    using the `transform_to` method with an `AltAz` object. 
+    The `AltAz` object is initialized with the observation time and location. 
+    Then, the `dms_to_deg` function is used to convert the altitude and azimuth from degrees-minutes-seconds (DMS) format to degrees format.
     """
     alt_az = body.transform_to(AltAz(obstime=time, location=loc))
     return (dms_to_deg(alt_az.alt.dms), dms_to_deg(alt_az.az.dms))
-
 
 class Grid_Sky:
     def generate_lon_lines(self):
